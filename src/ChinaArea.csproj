@@ -61,5 +61,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\taobao.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\RTBAsia.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
