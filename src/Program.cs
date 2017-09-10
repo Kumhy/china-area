@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
@@ -113,12 +114,27 @@ namespace ChinaArea
 
         public static string Get(string url)
         {
-            using (var web = new WebClient())
+            for (int i = 0; i < 10; i++)
             {
-                var bytes = web.DownloadData(url);
-                var encode = Encoding.GetEncoding(936);
-                return encode.GetString(bytes);
+                try
+                {
+                    using (var web = new WebClient())
+                    {
+                        web.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36");
+                        web.Headers.Add(HttpRequestHeader.Referer, "http://202.108.98.30");
+                        var bytes = web.DownloadData(url);
+                        var encode = Encoding.GetEncoding(936);
+                        return encode.GetString(bytes);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                }
             }
+            throw new Exception("获取失败");
         }
     }
 }
