@@ -1,29 +1,49 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace ChinaArea
-{
-    public class DataItem
-    {
+namespace ChinaArea {
+    public class DataItem {
         [JsonProperty("quHuaDaiMa")]
-        public string QuHuaDaiMa { get; set; }
+        public int QuHuaDaiMa { get; set; }
+
+        public int ParentId { get; set; }
 
         [JsonProperty("shengji")]
         public string ShengJi { get; set; }
 
-        public string ShengJiName
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(ShengJi))
-                {
+        public string Name {
+            get {
+                if (!string.IsNullOrWhiteSpace(XianJi)) {
+                    return XianJi;
+                } else if (!string.IsNullOrWhiteSpace(DiJi)) {
+                    return DiJi;
+                } else if (!string.IsNullOrWhiteSpace(ShengJiName)) {
+                    return ShengJiName;
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        public string ShengJiName {
+            get {
+                if (!string.IsNullOrWhiteSpace(ShengJi)) {
                     var x = ShengJi.IndexOf("(", StringComparison.CurrentCultureIgnoreCase);
-                    if (x != -1)
-                    {
+                    if (x != -1) {
                         return ShengJi.Substring(0, x);
                     }
                 }
                 return ShengJi;
+            }
+        }
+
+        public string ShengJiSortName {
+            get {
+                if (!string.IsNullOrWhiteSpace(ShengJi)) {
+                    return StringUtils.Between(ShengJi, "(", ")");
+                }
+
+                return null;
             }
         }
 
@@ -43,9 +63,8 @@ namespace ChinaArea
         public string YouBian { get; set; }
 
 
-        public override string ToString()
-        {
-            return string.Join(" ", QuHuaDaiMa, ShengJi, DiJi, XianJi);
+        public override string ToString() {
+            return string.Join(" ", QuHuaDaiMa, ParentId, ShengJi, DiJi, XianJi);
         }
     }
 }
